@@ -1,7 +1,10 @@
 package com.simplepipeline.storm;
 
+import java.util.Map;
+
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
+import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
@@ -14,13 +17,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-
-public class RedisCollectorBolt {
+public class RedisCollectorBolt extends BaseRichBolt {
 
     private OutputCollector _collector;
     
@@ -29,10 +26,10 @@ public class RedisCollectorBolt {
 	final String pattern; 
 	final Jedis jedis;
 
-    public RedisCollectorBolt(int numBuckets, int trackMinutes) {
-    	this.host = "127.0.0.1";
-    	this.port = 6379;
-    	this.pattern = "outQ";
+    public RedisCollectorBolt(String host, int port, String pattern) {
+    	this.host = host; //"127.0.0.1";
+    	this.port = port; // 6379;
+    	this.pattern = pattern; // "outQ";
         this.jedis = new Jedis(host);
     }
 
