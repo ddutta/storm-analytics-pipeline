@@ -9,12 +9,12 @@ public class RedisPubSubTopology {
         String host = args[0];
         int port = Integer.parseInt(args[1]);
         String ipattern = args[2];
-        String opattern = args[3];
+        String oqueue = args[3];
         TopologyBuilder builder = new TopologyBuilder();
         
-        builder.setSpout("subspout", new RedisPubSubSpout(host,port, ipattern));
-        builder.setBolt("collector", new RedisCollectorBolt(host, port, opattern), 3)
-        	.shuffleGrouping("subspout");
+        builder.setSpout("spout", new RedisPubSubSpout(host, port, ipattern));
+        builder.setBolt("collector", new RedisCollectorBolt(host, port, oqueue), 3)
+        	.shuffleGrouping("spout");
                 
         Config conf = new Config();
         conf.setDebug(true);
